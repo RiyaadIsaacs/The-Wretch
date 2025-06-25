@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
-public class PlayerMovement : MonoBehaviour
+public class PlayerControl : MonoBehaviour
 {
     //Movement Fields 
     private float speed = 8f;
@@ -10,20 +10,20 @@ public class PlayerMovement : MonoBehaviour
     //Health Fields - Exposed for ease of use
     [SerializeField] public int playerHealthMax;
     public int currentPlayerHealth;
-    
+
+    //Attack Field - Exposed for ease of use
+    [SerializeField] public int playerAttack = 20;
+
     //Respawn Fields 
     //Field to store empty of respawn point, can be an array if we need checkpoints?
     [SerializeField] public GameObject respawnPosition;
 
     //Singleton for easy access to player
-    public static PlayerMovement instance; 
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+    public static PlayerControl instance; 
 
-    }
-
+    // bool to check if the player has found the wheel
+    public bool hasWheel = false;
+   
     private void Awake()
     {
         if (instance == null)

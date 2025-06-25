@@ -7,7 +7,7 @@ public class PlayerDeath : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            PlayerMovement.instance.respawnPlayer(); // Respawn player for now but can add a game over screen
+            PlayerControl.instance.respawnPlayer(); // Respawn player for now but can add a game over screen
 
             Debug.Log("Player died");
         }
