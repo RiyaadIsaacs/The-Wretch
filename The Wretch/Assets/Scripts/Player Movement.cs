@@ -14,11 +14,27 @@ public class PlayerMovement : MonoBehaviour
     //Respawn Fields 
     //Field to store empty of respawn point, can be an array if we need checkpoints?
     [SerializeField] public GameObject respawnPosition;
+
+    //Singleton for easy access to player
+    public static PlayerMovement instance; 
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
+    }
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Update is called once per frame
@@ -72,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
     } 
     
     //Respawn player method - if we keep scene as is
-    private void respawnPlayer()
+    public void respawnPlayer()
     {
         //Reset player to the position of the original player, add if statement if we move to checkpoints
         this.transform.position = respawnPosition.transform.position;
