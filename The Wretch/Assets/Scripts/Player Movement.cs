@@ -1,10 +1,20 @@
 using UnityEngine;
-
+using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
 public class PlayerMovement : MonoBehaviour
 {
+    //Movement Fields 
     private float speed = 8f;
     private float baseSpeed = 8f;
 
+    //Health Fields - Exposed for ease of use
+    [SerializeField] public int playerHealthMax;
+    public int currentPlayerHealth;
+    
+    //Respawn Fields 
+    //Field to store empty of respawn point, can be an array if we need checkpoints?
+    [SerializeField] public GameObject respawnPosition;
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -52,4 +62,27 @@ public class PlayerMovement : MonoBehaviour
         // Apply movement to the ball
         transform.position += movement * speed * Time.deltaTime;
     }
+    
+    //Initialize the Player fields 
+    private void playerInitialize()
+    {
+        //Reset health 
+        currentPlayerHealth = playerHealthMax; 
+        //Possibly reset score? 
+    } 
+    
+    //Respawn player method - if we keep scene as is
+    private void respawnPlayer()
+    {
+        //Reset player to the position of the original player, add if statement if we move to checkpoints
+        this.transform.position = respawnPosition.transform.position;
+    }
+    
+    //Restart Game method 
+    private void restartGame()
+    {
+        //Reload current active scene 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    
 }
