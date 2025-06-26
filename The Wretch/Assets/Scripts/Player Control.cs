@@ -4,8 +4,7 @@ using UnityEngine.SceneManagement;
 public class PlayerControl : MonoBehaviour
 {
     //Movement Fields 
-    private float speed = 8f;
-    private float baseSpeed = 8f;
+    [SerializeField] private float speed = 20f, baseSpeed = 20f;
 
     //Health Fields - Exposed for ease of use
     [SerializeField] public float playerHealthMax = 100f;
@@ -27,6 +26,17 @@ public class PlayerControl : MonoBehaviour
     //Fields for checking attack range
     EnemyBehaviour enemyInRange;
 
+    // Apply the force to the rigidbody of the player
+    private Rigidbody rb;
+
+    //Animator for the player
+    private Animator animator;
+
+    // Assigning animator 
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void Awake()
     {
@@ -40,6 +50,8 @@ public class PlayerControl : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -80,8 +92,8 @@ public class PlayerControl : MonoBehaviour
         // Create a movement vector
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
 
-        // Apply movement to the ball
-        transform.position += movement * speed * Time.deltaTime;
+        // Apply movement to the rigidbody of the player
+        rb.MovePosition(transform.position + movement * speed * Time.deltaTime);
 
         if (Input.GetMouseButtonDown(0) && enemyInRange != null)
         {
