@@ -19,6 +19,11 @@ public class EnemyBehaviour : MonoBehaviour
     // WORK IN PROGRESS
     private void Update()
     {
+        // First, check if the player still exists. If not, do nothing.
+        if (playerTransform == null)
+        {
+            return;
+        }
         if (triggerAggro)
         {
             float enemySpeed = 10 * Time.deltaTime; // adjust this value to control the enemy's speed

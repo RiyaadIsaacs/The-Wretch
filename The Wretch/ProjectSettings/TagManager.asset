@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 3
   tags:
   - PickUp
+  - Checkpoint
+  - Enemy
   layers:
   - Default
   - TransparentFX

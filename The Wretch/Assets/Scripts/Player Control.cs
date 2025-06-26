@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
+using System.Collections;
 public class PlayerControl : MonoBehaviour
 {
     //Movement Fields 
@@ -31,6 +32,20 @@ public class PlayerControl : MonoBehaviour
 
     //Animator for the player
     private Animator animator;
+
+    //Bools for game management
+    private bool checkpointAchieved = false;
+    private bool hasCog = false;
+    private GameObject wheelCog;
+    private bool bridgeOpened = false;
+    
+    //Draw bridge implementation 
+    // Add these variables at the top of your PlayerControl class
+    [Header("Bridge Control")]
+    [SerializeField] private Transform drawbridgeTransform;
+    [SerializeField] private Transform cogPlacementSpot;
+    [SerializeField] private float bridgeRotationAngle = 90.0f;
+    [SerializeField] private float rotationDuration = 3.0f;
 
     // Assigning animator 
     void Start()
@@ -105,18 +120,28 @@ public class PlayerControl : MonoBehaviour
     //Initialize the Player fields 
     private void playerInitialize()
     {
-        //Reset health 
+        //Reset health and attack
         currentPlayerHealth = playerHealthMax;
-        //Possibly reset score? 
+        playerAttack = 20;
     }
 
     //Respawn player method - if we keep scene as is
     public void respawnPlayer()
     {
-        //Reset player to the position of the original player, add if statement if we move to checkpoints
-        this.transform.position = respawnPosition.transform.position;
-        playerAttack = 20;
-        currentPlayerHealth = playerHealthMax;
+        //Check if checkpoint has been reached 
+        if (checkpointAchieved == true)
+        {
+            //Reset player to the position of the checkpoint
+            this.transform.position = respawnPosition.transform.position;
+            //Reset player stats 
+            playerInitialize();
+        }
+        else
+        {
+            //Restart the Game 
+            restartGame();
+        }
+        
     }
 
     //Restart Game method 
@@ -135,6 +160,70 @@ public class PlayerControl : MonoBehaviour
             enemyInRange = other.GetComponent<EnemyBehaviour>();
             Debug.Log("Enemy in range: " + enemyInRange.name);
         }
+        
+        //Trigger for Checpoint 1
+        if (other.tag == "Checkpoint")
+        {
+            //Mark that checkpoint has been achieved 
+            checkpointAchieved = true;
+            //Log message that we have achieved checkpoint
+            Debug.Log("Checkpoint achieved");
+        }
+        
+        //Trigger for the Wheel Pickup
+        if (other.name == "DrawBridgeCog")
+        {
+            //Set bool to activate that we have gotten the cog 
+            hasCog = true; 
+            //Log that we have the cog 
+            Debug.Log("Draw bridge cog obtained");
+            //Hide object and save it to game object variable for future
+            wheelCog = other.gameObject;
+            wheelCog.SetActive(false);
+        }
+        
+        //Trigger Check to place Cog by bridge and trigger bridge opening
+        if (other.name == "DrawBridgeRockl")
+        {
+            // Check if the player has the cog and the bridge hasn't been opened yet.
+            if (hasCog == true && bridgeOpened == false)
+            {
+                Debug.Log("Player has the cog. Placing it and opening the bridge.");
+
+                // 1. Move and show the Cog
+                // Access the wheelCog GameObject you stored earlier
+                if (wheelCog != null)
+                {
+                    // Set the cog's parent to the placement spot (optional but good practice)
+                    wheelCog.transform.SetParent(cogPlacementSpot); 
+                    // Move the cog to the exact position and rotation of the placement spot
+                    wheelCog.transform.position = cogPlacementSpot.position;
+                    wheelCog.transform.rotation = cogPlacementSpot.rotation;
+                    // Make the cog visible again
+                    wheelCog.SetActive(true);
+                }
+
+                // 2. Open the Bridge
+                // Start the coroutine that handles the rotation animation
+                StartCoroutine(RotateBridge());
+        
+                // 3. Clean up
+                // Set hasCog to false so this trigger doesn't run again
+                hasCog = false;
+                bridgeOpened = true;
+                
+                //Disable collider on cog so not pickable 
+                Collider cogCollider = wheelCog.GetComponent<Collider>();
+                if (cogCollider != null)
+                {
+                    cogCollider.enabled = false;
+                }
+            }
+            else
+            {
+                Debug.Log("Player does not have the cog yet.");
+            }
+        }
     }
 
     // Trigger for leaving attack range
@@ -142,8 +231,8 @@ public class PlayerControl : MonoBehaviour
     {
         if (other.tag == "Enemy")
         {
+            Debug.Log("Enemy out of range: " + other.name);
             enemyInRange = null;
-            Debug.Log("Enemy out of range: " + enemyInRange.name);
         }
     }
 
@@ -152,7 +241,40 @@ public class PlayerControl : MonoBehaviour
         currentPlayerHealth -= damage;
         if (currentPlayerHealth <= 0)
         {
-            restartGame();
+            respawnPlayer();
+        }
+    }
+    
+    
+    // Coroutine to smoothly rotate the bridge around a pivot point over a set duration.
+    private IEnumerator RotateBridge()
+    {
+        float timeElapsed = 0;
+        float totalRotation = 0;
+
+        // The axis to rotate on, relative to the bridge itself. 
+        // Vector3.right is the local X-axis (red arrow).
+        Vector3 rotationAxis = Vector3.right;
+
+        while (timeElapsed < rotationDuration)
+        {
+            // Calculate how much to rotate in this single frame
+            float rotationThisFrame = (bridgeRotationAngle / rotationDuration) * Time.deltaTime;
+
+            // Make sure we don't overshoot the target angle
+            if (totalRotation + rotationThisFrame > bridgeRotationAngle)
+            {
+                rotationThisFrame = bridgeRotationAngle - totalRotation;
+            }
+
+            // Rotate the bridge around its own pivot point
+            drawbridgeTransform.Rotate(rotationAxis, rotationThisFrame);
+
+            totalRotation += rotationThisFrame;
+            timeElapsed += Time.deltaTime;
+
+            // Wait until the next frame to continue the loop
+            yield return null;
         }
     }
 }
