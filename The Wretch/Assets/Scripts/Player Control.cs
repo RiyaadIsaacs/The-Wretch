@@ -33,7 +33,7 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody rb;
 
     //Animator for the player
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     //Bools for game management
     private bool checkpointAchieved = false;
@@ -78,22 +78,42 @@ public class PlayerControl : MonoBehaviour
         float horizontalInput = 0;
         float verticalInput = 0;
 
-        if (Input.GetKey(KeyCode.A))
+        switch (Input.GetKey(KeyCode.A) ? "A" : Input.GetKey(KeyCode.D) ? "D" : Input.GetKey(KeyCode.W) ? "W" : Input.GetKey(KeyCode.S) ? "S" : "")
         {
-            horizontalInput = -0.5f;
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            horizontalInput = 0.5f;
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            verticalInput = 1.5f;
-        }
-        else if (Input.GetKey(KeyCode.S))
-        {
-            verticalInput = -1.5f;
+            case "A":
+                horizontalInput = -0.5f;
+                animator.SetBool("Walk Forward", false);
+                animator.SetBool("Walk Back", false);
+                animator.SetBool("Walk Left", false);
+                animator.SetBool("Walk Right", true);
+                break;
+            case "D":
+                horizontalInput = 0.5f;
+                animator.SetBool("Walk Forward", false);
+                animator.SetBool("Walk Back", false);
+                animator.SetBool("Walk Left", true);
+                animator.SetBool("Walk Right", false);
+                break;
+            case "W":
+                verticalInput = 1.5f;
+                animator.SetBool("Walk Forward", true);
+                animator.SetBool("Walk Back", false);
+                animator.SetBool("Walk Left", false);
+                animator.SetBool("Walk Right", false);
+                break;
+            case "S":
+                verticalInput = -1.5f;
+                animator.SetBool("Walk Forward", false);
+                animator.SetBool("Walk Back", true);
+                animator.SetBool("Walk Left", false);
+                animator.SetBool("Walk Right", false);
+                break;
+            default:
+                animator.SetBool("Walk Forward", false);
+                animator.SetBool("Walk Back", false);
+                animator.SetBool("Walk Left", false);
+                animator.SetBool("Walk Right", false);
+                break;
         }
 
         // Read the shift key to move faster
@@ -168,7 +188,7 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionExit(Collision collision)
     {
-if (collision.gameObject.tag == "Wall")
+        if (collision.gameObject.tag == "Wall")
         {
             noSprint = false;
             baseSpeed = 50f;
