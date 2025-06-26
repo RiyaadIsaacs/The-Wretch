@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Collections;
+
 public class PlayerControl : MonoBehaviour
 {
     //Movement Fields 
@@ -43,8 +44,9 @@ public class PlayerControl : MonoBehaviour
 
     //Draw bridge implementation 
     // Add these variables at the top of your PlayerControl class
-    [Header("Bridge Control")]
-    [SerializeField] private Transform drawbridgeTransform;
+    [Header("Bridge Control")] [SerializeField]
+    private Transform drawbridgeTransform;
+
     [SerializeField] private Transform cogPlacementSpot;
     [SerializeField] private float bridgeRotationAngle = 90.0f;
     [SerializeField] private float rotationDuration = 3.0f;
@@ -78,7 +80,10 @@ public class PlayerControl : MonoBehaviour
         float horizontalInput = 0;
         float verticalInput = 0;
 
-        switch (Input.GetKey(KeyCode.A) ? "A" : Input.GetKey(KeyCode.D) ? "D" : Input.GetKey(KeyCode.W) ? "W" : Input.GetKey(KeyCode.S) ? "S" : "")
+        switch (Input.GetKey(KeyCode.A) ? "A" :
+                Input.GetKey(KeyCode.D) ? "D" :
+                Input.GetKey(KeyCode.W) ? "W" :
+                Input.GetKey(KeyCode.S) ? "S" : "")
         {
             case "A":
                 horizontalInput = -0.5f;
@@ -268,6 +273,13 @@ public class PlayerControl : MonoBehaviour
                 Debug.Log("Player does not have the cog yet.");
             }
         }
+
+        //Trigger for win 
+        if (other.name == "Tentacle")
+        {
+            //Show Victory screen 
+            showVitory();
+        }
     }
 
     // Trigger for leaving attack range
@@ -285,7 +297,7 @@ public class PlayerControl : MonoBehaviour
         currentPlayerHealth -= damage;
         if (currentPlayerHealth <= 0)
         {
-            respawnPlayer();
+            showDeath();
         }
     }
 
@@ -320,5 +332,61 @@ public class PlayerControl : MonoBehaviour
             // Wait until the next frame to continue the loop
             yield return null;
         }
+    }
+
+    //GUI Scripts 
+    public GameObject mainMenuPanel;
+    public GameObject guiPanel;
+    public GameObject pauseMenuPanel;
+    public GameObject deathPanel;
+    public GameObject victoryPanel;
+
+    //Start Game 
+    public void StartGame()
+    {
+        // hide main menu panel, show game GUI 
+        mainMenuPanel.SetActive(false);
+        guiPanel.SetActive(true);
+    }
+
+    public void pauseGame()
+    {
+        //Freeze time 
+        Time.timeScale = 0.0f;
+        guiPanel.SetActive(false);
+        pauseMenuPanel.SetActive(true);
+    }
+
+    public void showVitory()
+    {
+        guiPanel.SetActive(false);
+        victoryPanel.SetActive(true);
+    }
+    
+    public void showDeath()
+    {
+        guiPanel.SetActive(false);
+        victoryPanel.SetActive(true);
+    }
+
+    public void resumeGame()
+    {
+        //Hide current panel 
+        pauseMenuPanel.SetActive(false);
+        //Unfreeze time 
+        Time.timeScale = 1.0f;
+        guiPanel.SetActive(true);
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
+    }
+
+    public void showMainMenu()
+    {
+        // hide Victory panel, show Main GUI 
+        victoryPanel.SetActive(false);
+        mainMenuPanel.SetActive(true);
     }
 }
