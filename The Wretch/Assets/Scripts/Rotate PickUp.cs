@@ -5,6 +5,9 @@ public class RotatePickUp : MonoBehaviour
     // speed of rotation - SerializeField so it can easily be set in the inspector
     [SerializeField] private float rotationSpeed = 10f;
 
+    // Get the enum for the type of pick up
+    [SerializeField] public PickUpType pickUps;
+
     // Update is called once per frame
     void Update()
     {

@@ -8,8 +8,8 @@ public class PlayerControl : MonoBehaviour
     private float baseSpeed = 8f;
 
     //Health Fields - Exposed for ease of use
-    [SerializeField] public int playerHealthMax;
-    public int currentPlayerHealth;
+    [SerializeField] public float playerHealthMax = 100f;
+    public float currentPlayerHealth;
 
     //Attack Field - Exposed for ease of use
     [SerializeField] public int playerAttack = 20;
@@ -19,17 +19,22 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] public GameObject respawnPosition;
 
     //Singleton for easy access to player
-    public static PlayerControl instance; 
+    public static PlayerControl instance;
 
     // bool to check if the player has found the wheel
     public bool hasWheel = false;
-   
+
+    //Fields for checking attack range
+    EnemyBehaviour enemyInRange;
+
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            playerInitialize();
         }
         else
         {
@@ -77,28 +82,65 @@ public class PlayerControl : MonoBehaviour
 
         // Apply movement to the ball
         transform.position += movement * speed * Time.deltaTime;
+
+        if (Input.GetMouseButtonDown(0) && enemyInRange != null)
+        {
+            enemyInRange.EnemyTakeDamage(playerAttack);
+            Debug.Log("Player attacked: " + enemyInRange.name);
+        }
     }
-    
+
     //Initialize the Player fields 
     private void playerInitialize()
     {
         //Reset health 
-        currentPlayerHealth = playerHealthMax; 
+        currentPlayerHealth = playerHealthMax;
         //Possibly reset score? 
-    } 
-    
+    }
+
     //Respawn player method - if we keep scene as is
     public void respawnPlayer()
     {
         //Reset player to the position of the original player, add if statement if we move to checkpoints
         this.transform.position = respawnPosition.transform.position;
+        playerAttack = 20;
+        currentPlayerHealth = playerHealthMax;
     }
-    
+
     //Restart Game method 
     private void restartGame()
     {
         //Reload current active scene 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
-    
+
+    // Trigger for attack range
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnTriggerEnter called");
+        if (other.tag == "Enemy")
+        {
+            enemyInRange = other.GetComponent<EnemyBehaviour>();
+            Debug.Log("Enemy in range: " + enemyInRange.name);
+        }
+    }
+
+    // Trigger for leaving attack range
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            enemyInRange = null;
+            Debug.Log("Enemy out of range: " + enemyInRange.name);
+        }
+    }
+
+    public void PlayerTakeDamage(float damage)
+    {
+        currentPlayerHealth -= damage;
+        if (currentPlayerHealth <= 0)
+        {
+            restartGame();
+        }
+    }
 }

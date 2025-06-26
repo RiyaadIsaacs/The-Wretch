@@ -3,26 +3,18 @@ using UnityEngine;
 public class EnemyBehaviour : MonoBehaviour
 {
     // Trigger for the enemies to walk to and attack the player
-    private bool triggerAggro;
-
-    // Empty Object for spawn point for the enemies
-    [SerializeField] private GameObject enemySpawnPoint;
-
-    // Empty Object for attack range - may not be needed 
-    [SerializeField] private GameObject attackRange;
+    public bool triggerAggro = false;
 
     // Transform of the player, assigned in the inspector, for enemies to target
     [SerializeField] private Transform playerTransform;
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Player")
-        {
-            // Move the enemy to the spawn point and cause them to attack the player
-            transform.position = enemySpawnPoint.transform.position;
-            triggerAggro = true;
-        }
-    }
+    [SerializeField] private float health = 100f;
+    [SerializeField] private float enemyAttack = 10f;
+
+    // Attack variables
+    private PlayerControl playerInRange;
+    private float attackDelay = 1f; // adjust this value to control the attack delay
+    private float timeSinceLastAttack = 0f;
 
     // WORK IN PROGRESS
     private void Update()
@@ -32,11 +24,40 @@ public class EnemyBehaviour : MonoBehaviour
             float enemySpeed = 10 * Time.deltaTime; // adjust this value to control the enemy's speed
             transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, enemySpeed);
 
-            // You can also add a check to see if the enemy is close enough to attack
-            if (Vector3.Distance(transform.position, playerTransform.position) < 1f) // adjust this value to control the attack range
+            timeSinceLastAttack += Time.deltaTime;
+            if (timeSinceLastAttack >= attackDelay)
             {
-                // Attack the player!
+                playerInRange.PlayerTakeDamage(enemyAttack);
+                playerInRange = null;
+                timeSinceLastAttack = 0f;
             }
+        }
+    }
+
+    public void EnemyTakeDamage(float damage)
+    {
+        health -= damage;
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Trigger for attack range
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            playerInRange = other.GetComponent<PlayerControl>();
+        }
+    }
+
+    // Trigger for leaving attack range
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player")
+        {
+            playerInRange = null;
         }
     }
 }
