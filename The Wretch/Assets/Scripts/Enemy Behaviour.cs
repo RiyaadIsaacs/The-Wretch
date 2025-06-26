@@ -16,7 +16,6 @@ public class EnemyBehaviour : MonoBehaviour
     private float attackDelay = 1f; // adjust this value to control the attack delay
     private float timeSinceLastAttack = 0f;
 
-    // WORK IN PROGRESS
     private void Update()
     {
         // First, check if the player still exists. If not, do nothing.
@@ -26,7 +25,7 @@ public class EnemyBehaviour : MonoBehaviour
         }
         if (triggerAggro)
         {
-            float enemySpeed = 10 * Time.deltaTime; // adjust this value to control the enemy's speed
+            float enemySpeed = 5f * Time.deltaTime; // adjust this value to control the enemy's speed
             transform.position = Vector3.MoveTowards(transform.position, playerTransform.position, enemySpeed);
 
             timeSinceLastAttack += Time.deltaTime;

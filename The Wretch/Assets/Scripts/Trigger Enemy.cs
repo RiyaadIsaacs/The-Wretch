@@ -13,6 +13,8 @@ public class TriggerEnemy : MonoBehaviour
                 enemy.triggerAggro = true;
             }
 
+            Debug.Log("Enemies in section 1 Aggro");
+
             Destroy(gameObject);
         }
     }

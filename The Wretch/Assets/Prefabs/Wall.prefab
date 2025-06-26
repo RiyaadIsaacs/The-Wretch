@@ -68,6 +68,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wall
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 367a3be869fcedf43b0a340c49fa3a26, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -100,5 +104,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.1848778, y: 16.285677, z: 17.168787}
-  m_Center: {x: -0.109540746, y: 8.08273, z: -8.605489}
+  m_Size: {x: 2.7743623, y: 16.285675, z: 20.099712}
+  m_Center: {x: 0.68520266, y: 8.08273, z: -8.961382}

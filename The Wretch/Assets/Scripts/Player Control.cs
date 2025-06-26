@@ -7,6 +7,8 @@ public class PlayerControl : MonoBehaviour
     //Movement Fields 
     [SerializeField] private float speed = 20f, baseSpeed = 20f;
 
+    private bool noSprint = false;
+
     //Health Fields - Exposed for ease of use
     [SerializeField] public float playerHealthMax = 100f;
     public float currentPlayerHealth;
@@ -38,7 +40,7 @@ public class PlayerControl : MonoBehaviour
     private bool hasCog = false;
     private GameObject wheelCog;
     private bool bridgeOpened = false;
-    
+
     //Draw bridge implementation 
     // Add these variables at the top of your PlayerControl class
     [Header("Bridge Control")]
@@ -95,7 +97,7 @@ public class PlayerControl : MonoBehaviour
         }
 
         // Read the shift key to move faster
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !noSprint)
         {
             speed = baseSpeed * 2;
         }
@@ -107,8 +109,12 @@ public class PlayerControl : MonoBehaviour
         // Create a movement vector
         Vector3 movement = new Vector3(horizontalInput, 0, verticalInput);
 
+        // adjust this value to control the maximum distance the player can move
+        float maxDistance = 0.425f;
+
         // Apply movement to the rigidbody of the player
-        rb.MovePosition(transform.position + movement * speed * Time.deltaTime);
+        Vector3 targetPosition = transform.position + movement * speed * Time.deltaTime;
+        rb.MovePosition(Vector3.MoveTowards(transform.position, targetPosition, maxDistance));
 
         if (Input.GetMouseButtonDown(0) && enemyInRange != null)
         {
@@ -141,14 +147,32 @@ public class PlayerControl : MonoBehaviour
             //Restart the Game 
             restartGame();
         }
-        
+
     }
 
     //Restart Game method 
-    private void restartGame()
+    public void restartGame()
     {
         //Reload current active scene 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Wall")
+        {
+            noSprint = true;
+            baseSpeed = 30f;
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+if (collision.gameObject.tag == "Wall")
+        {
+            noSprint = false;
+            baseSpeed = 50f;
+        }
     }
 
     // Trigger for attack range
@@ -160,7 +184,7 @@ public class PlayerControl : MonoBehaviour
             enemyInRange = other.GetComponent<EnemyBehaviour>();
             Debug.Log("Enemy in range: " + enemyInRange.name);
         }
-        
+
         //Trigger for Checpoint 1
         if (other.tag == "Checkpoint")
         {
@@ -169,19 +193,19 @@ public class PlayerControl : MonoBehaviour
             //Log message that we have achieved checkpoint
             Debug.Log("Checkpoint achieved");
         }
-        
+
         //Trigger for the Wheel Pickup
         if (other.name == "DrawBridgeCog")
         {
             //Set bool to activate that we have gotten the cog 
-            hasCog = true; 
+            hasCog = true;
             //Log that we have the cog 
             Debug.Log("Draw bridge cog obtained");
             //Hide object and save it to game object variable for future
             wheelCog = other.gameObject;
             wheelCog.SetActive(false);
         }
-        
+
         //Trigger Check to place Cog by bridge and trigger bridge opening
         if (other.name == "DrawBridgeRockl")
         {
@@ -195,7 +219,7 @@ public class PlayerControl : MonoBehaviour
                 if (wheelCog != null)
                 {
                     // Set the cog's parent to the placement spot (optional but good practice)
-                    wheelCog.transform.SetParent(cogPlacementSpot); 
+                    wheelCog.transform.SetParent(cogPlacementSpot);
                     // Move the cog to the exact position and rotation of the placement spot
                     wheelCog.transform.position = cogPlacementSpot.position;
                     wheelCog.transform.rotation = cogPlacementSpot.rotation;
@@ -206,12 +230,12 @@ public class PlayerControl : MonoBehaviour
                 // 2. Open the Bridge
                 // Start the coroutine that handles the rotation animation
                 StartCoroutine(RotateBridge());
-        
+
                 // 3. Clean up
                 // Set hasCog to false so this trigger doesn't run again
                 hasCog = false;
                 bridgeOpened = true;
-                
+
                 //Disable collider on cog so not pickable 
                 Collider cogCollider = wheelCog.GetComponent<Collider>();
                 if (cogCollider != null)
@@ -244,8 +268,8 @@ public class PlayerControl : MonoBehaviour
             respawnPlayer();
         }
     }
-    
-    
+
+
     // Coroutine to smoothly rotate the bridge around a pivot point over a set duration.
     private IEnumerator RotateBridge()
     {
