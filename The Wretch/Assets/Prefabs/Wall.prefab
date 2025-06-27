@@ -64,6 +64,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 367a3be869fcedf43b0a340c49fa3a26, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: d71f1279d121f724792bee59d6b3707c, type: 2}
     - target: {fileID: 919132149155446097, guid: 367a3be869fcedf43b0a340c49fa3a26, type: 3}
       propertyPath: m_Name
       value: Wall
@@ -125,6 +129,22 @@ PrefabInstance:
     - target: {fileID: 1821872998415309510, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
       propertyPath: m_Name
       value: Torch with light 1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152339663074818882, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
+      propertyPath: m_Color.b
+      value: 0.13333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152339663074818882, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
+      propertyPath: m_Color.g
+      value: 0.36862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152339663074818882, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
+      propertyPath: m_Color.r
+      value: 0.7254902
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152339663074818882, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
+      propertyPath: m_Intensity
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7259786566559675380, guid: 807dd0934f157d04688e97644040bb8c, type: 3}
       propertyPath: m_LocalScale.x
