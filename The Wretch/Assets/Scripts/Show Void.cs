@@ -1,14 +1,14 @@
 using UnityEngine;
 
-public class HideVoid : MonoBehaviour
+public class ShowVoid : MonoBehaviour
 {
     [SerializeField] private GameObject Void;
 
     private void OnTriggerExit(Collider other)
+{
+    if (other.tag == "Player")
     {
-        if (other.tag == "Player")
-        {
-            Void.SetActive(true);
-        }
+        Void.SetActive(true);
     }
+}
 }

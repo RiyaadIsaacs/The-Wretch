@@ -9729,6 +9729,7 @@ Transform:
   - {fileID: 1800078733}
   - {fileID: 403253362}
   - {fileID: 2128835103}
+  - {fileID: 1134018258}
   - {fileID: 852169112}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
@@ -11064,6 +11065,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3393451338582009922, guid: d5432d57dc6fd3d40bf80b7c683c7855, type: 3}
   m_PrefabInstance: {fileID: 1128601370}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1134018257
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1134018258}
+  - component: {fileID: 1134018260}
+  - component: {fileID: 1134018259}
+  m_Layer: 0
+  m_Name: Void Show
+  m_TagString: Untagged
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1134018258
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134018257}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.72, y: -8.05, z: 28.15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1018977697}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1134018259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134018257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e107f4aa568bfd046a9f10dbeb810489, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Void: {fileID: 852169108}
+--- !u!65 &1134018260
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1134018257}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.9912097, y: 4.4974895, z: 20.942274}
+  m_Center: {x: -0.25276256, y: 1.7487447, z: 5.6429706}
 --- !u!1001 &1134491621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15253,7 +15321,7 @@ MonoBehaviour:
   soundList:
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 8300000, guid: 0a6187f5506944f41bac8676d0fa1324, type: 3}
+  - {fileID: 8300000, guid: 9599c10f9c4d9cd4ebd30ef754073327, type: 3}
 --- !u!82 &1502699507
 AudioSource:
   m_ObjectHideFlags: 0
@@ -21313,7 +21381,7 @@ GameObject:
   - component: {fileID: 2128835105}
   - component: {fileID: 2128835104}
   m_Layer: 0
-  m_Name: Void Hide and show
+  m_Name: 'Void Hide '
   m_TagString: Untagged
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -21362,7 +21430,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
