@@ -32,6 +32,11 @@ public class PickUp : MonoBehaviour
             case PickUpType.HealthPickup:
                 PlayerControl.instance.currentPlayerHealth = PlayerControl.instance.playerHealthMax;
                 break;
+            case PickUpType.TreasurePickup:
+                PlayerControl.instance.playerMoney += 100;
+                PlayerControl.instance.textComponent.text = PlayerControl.instance.playerMoney.ToString();
+                break;
+
             case PickUpType.TentaclePickup:
                 // Activate UI that says player wins
                 Debug.Log("Player wins!");

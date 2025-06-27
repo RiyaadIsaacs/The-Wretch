@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using TMPro;
 
 public class PlayerControl : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PlayerControl : MonoBehaviour
 
     //Attack Field - Exposed for ease of use
     [SerializeField] public int playerAttack = 20;
+
+    public int playerMoney;
 
     //Respawn Fields 
     //Field to store empty of respawn point, can be an array if we need checkpoints?
@@ -50,6 +53,8 @@ public class PlayerControl : MonoBehaviour
     [SerializeField] private Transform cogPlacementSpot;
     [SerializeField] private float bridgeRotationAngle = 90.0f;
     [SerializeField] private float rotationDuration = 3.0f;
+
+    public TextMeshProUGUI textComponent; 
 
     // Assigning animator 
     void Start()
