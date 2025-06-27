@@ -13,8 +13,14 @@ public class EnemyBehaviour : MonoBehaviour
 
     // Attack variables
     private PlayerControl playerInRange;
-    private float attackDelay = 1f; // adjust this value to control the attack delay
+    [SerializeField] private float attackDelay = 1f; // adjust this value to control the attack delay
     private float timeSinceLastAttack = 0f;
+
+    // bool specifically for if the boss is alive
+    public bool bossAlive = true;
+
+    // Reference to the tentacle spawn script
+    public TentacleSpawn tentacleSpawn;
 
     private void Update()
     {
@@ -44,6 +50,13 @@ public class EnemyBehaviour : MonoBehaviour
         if (health <= 0)
         {
             Destroy(gameObject);
+
+            if (bossAlive)
+            {
+                bossAlive = false;
+
+                tentacleSpawn.OnBossDeath();
+            }
         }
     }
 
