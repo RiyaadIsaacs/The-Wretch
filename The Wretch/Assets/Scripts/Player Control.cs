@@ -371,7 +371,7 @@ public class PlayerControl : MonoBehaviour
     public void showDeath()
     {
         guiPanel.SetActive(false);
-        victoryPanel.SetActive(true);
+        deathPanel.SetActive(true);
     }
 
     public void resumeGame()
