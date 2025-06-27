@@ -8,7 +8,7 @@ public class HideVoid : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            Void.SetActive(true);
+            Void.SetActive(false);
         }
     }
 }
